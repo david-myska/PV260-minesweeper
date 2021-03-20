@@ -62,8 +62,8 @@ namespace MinesweeperTests
             IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
             A.CallTo(() => gameBoardCreator.GenerateGameBoard(3, 3)).Returns(new Field[3, 3] {
                 { Field.Covered, Field.Covered, Field.Covered },
-                { Field.Covered, Field.Covered, Field.Covered},
-                { Field.Covered, Field.Covered, Field.Covered}
+                { Field.Covered, Field.Covered, Field.Covered },
+                { Field.Covered, Field.Covered, Field.Covered }
             });
 
             IGameBoard gameBoard = new GameBoard(gameBoardCreator, 3, 3);
@@ -71,6 +71,38 @@ namespace MinesweeperTests
             gameBoard.Choose(posX, posY);
 
             Assert.False(gameBoard.Get(posX, posY).HasFlag(Field.Covered));
+        }
+
+        [Test]
+        [TestCase(1, 1)]
+        [TestCase(1, 2)]
+        [TestCase(1, 3)]
+        [TestCase(2, 1)]
+        [TestCase(2, 2)]
+        [TestCase(2, 3)]
+        [TestCase(3, 1)]
+        [TestCase(3, 2)]
+        [TestCase(3, 3)]
+        public void GivenCoveredBoard_UncoverCorrectlyLargerArea(int posX, int posY)
+        {
+            IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
+            A.CallTo(() => gameBoardCreator.GenerateGameBoard(3, 3)).Returns(new Field[3, 3] {
+                { Field.Covered, Field.Covered, Field.Covered },
+                { Field.Covered, Field.Covered, Field.Covered },
+                { Field.Covered, Field.Covered, Field.Covered }
+            });
+
+            IGameBoard gameBoard = new GameBoard(gameBoardCreator, 3, 3);
+
+            gameBoard.Choose(posX, posY);
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    Assert.False(gameBoard.Get(i, j).HasFlag(Field.Covered));
+                }
+            }
         }
     }
 }
