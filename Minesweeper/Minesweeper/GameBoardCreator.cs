@@ -6,7 +6,19 @@ namespace Minesweeper
     {
         public Field[,] GenerateGameBoard(int dimX, int dimY)
         {
-            return new Field[,] { { Field.EmptyCovered } };
+            if (dimX < 3)
+                dimX = 3;
+            if (dimX > 50)
+                dimX = 50;
+
+            if (dimY < 3)
+                dimY = 3;
+            if (dimY > 50)
+                dimY = 50;
+
+            var field = new Field[dimX, dimY];
+
+            return field;
         }
     }
 }
