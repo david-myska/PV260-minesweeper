@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Standy\\PV260-minesweeper\\Minesweeper\\Minesweeper\\Minesweeper.csproj": {}
+    "C:\\Users\\Tomáš\\hwpv260\\Minesweeper\\Minesweeper\\Minesweeper.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Standy\\PV260-minesweeper\\Minesweeper\\Minesweeper\\Minesweeper.csproj": {
+    "C:\\Users\\Tomáš\\hwpv260\\Minesweeper\\Minesweeper\\Minesweeper.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Standy\\PV260-minesweeper\\Minesweeper\\Minesweeper\\Minesweeper.csproj",
+        "projectUniqueName": "C:\\Users\\Tomáš\\hwpv260\\Minesweeper\\Minesweeper\\Minesweeper.csproj",
         "projectName": "Minesweeper",
-        "projectPath": "C:\\Users\\Standy\\PV260-minesweeper\\Minesweeper\\Minesweeper\\Minesweeper.csproj",
-        "packagesPath": "C:\\Users\\Standy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Standy\\PV260-minesweeper\\Minesweeper\\Minesweeper\\obj\\",
+        "projectPath": "C:\\Users\\Tomáš\\hwpv260\\Minesweeper\\Minesweeper\\Minesweeper.csproj",
+        "packagesPath": "C:\\Users\\Tomáš\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Tomáš\\hwpv260\\Minesweeper\\Minesweeper\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Standy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Tomáš\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

@@ -1,5 +1,9 @@
-﻿using Minesweeper;
+﻿using System;
+using System.Collections;
+using Minesweeper;
 using NUnit.Framework;
+using FakeItEasy;
+using System.Linq;
 
 namespace MinesweeperTests
 {
@@ -14,7 +18,7 @@ namespace MinesweeperTests
         [TestCase(60, 40, 50, 40)]
         public void GivenInvalidDimensions_ThenGeneratorCreatesClosestValidBoard(int dimX, int dimY, int expectedDimX, int expectedDimY)
         {
-            IGameBoardCreator creator = new GameBoardCreator();
+            IGameBoardCreator creator = new GameBoardCreator(new RandInt());
             var board = creator.GenerateGameBoard(dimX, dimY);
 
             Assert.That(board.GetLength(0) == expectedDimX);
@@ -27,7 +31,7 @@ namespace MinesweeperTests
         [TestCase(25, 40, 25, 40)]
         public void GivenValidDimensions_ThenGeneratorCreatesValidBoard(int dimX, int dimY, int expectedDimX, int expectedDimY)
         {
-            IGameBoardCreator creator = new GameBoardCreator();
+            IGameBoardCreator creator = new GameBoardCreator(new RandInt());
             var board = creator.GenerateGameBoard(dimX, dimY);
 
             Assert.That(board.GetLength(0) == expectedDimX);
@@ -39,10 +43,36 @@ namespace MinesweeperTests
         [TestCase(3, 3)]
         public void GivenGameBoard_ContainsMines(int dimX, int dimY)
         {
-            IGameBoardCreator creator = new GameBoardCreator();
+            IGameBoardCreator creator = new GameBoardCreator(new RandInt());
             var board = creator.GenerateGameBoard(dimX, dimY);
 
             Assert.Contains(Field.Mine, board);
+        }
+
+        [Test]
+        [TestCase(3, 3, 50)]
+        [TestCase(40, 20, 50)]
+        [TestCase(50, 50, 50)]
+        [TestCase(50, 50, 60)]
+        [TestCase(50, 50, 60)]
+        [TestCase(30, 31, 20)]
+        [TestCase(31, 30, 20)]
+        public void GivenGameBoard_ContainsValidPercentOfMines(int dimX, int dimY, int percent)
+        {
+            IRandom randomGenerator = A.Fake<IRandom>();
+            A.CallTo(() => randomGenerator.NextInt()).Returns(percent);
+            IGameBoardCreator creator = new GameBoardCreator(randomGenerator);
+            var board = creator.GenerateGameBoard(dimX, dimY);
+            int mineCount = 0;
+            int expectedCount = (int) ((dimX * dimY) * (percent / 100.0));
+
+            foreach (var v in board)
+            {
+                if (v == Field.Mine)
+                    mineCount++;
+            }
+
+            Assert.That(mineCount == expectedCount);
         }
     }
 }

@@ -4,7 +4,12 @@ namespace Minesweeper
 {
     public class GameBoardCreator : IGameBoardCreator
     {
-        private Random numberGenerator = new Random();
+        private IRandom numberGenerator;
+
+        public GameBoardCreator(IRandom next)
+        {
+            numberGenerator = next;
+        }
 
         public Field[,] GenerateGameBoard(int dimX, int dimY)
         {
@@ -12,7 +17,7 @@ namespace Minesweeper
             dimY = AdjustDimension(dimY);
 
             var field = new Field[dimX, dimY];
-            int rand = numberGenerator.Next(20,61);
+            int rand = numberGenerator.NextInt();
             int numberOfMines = (int)((dimX * dimY) * (rand / 100.0));
 
             FillMines(field, numberOfMines, dimX, dimY);
@@ -24,8 +29,8 @@ namespace Minesweeper
         {
             for (int i = numberOfMines; i > 0; i--)
             {
-                int randXPosition = numberGenerator.Next() % dimX;
-                int randYPosition = numberGenerator.Next() % dimY;
+                int randXPosition = numberGenerator.NextInt() % dimX;
+                int randYPosition = numberGenerator.NextInt() % dimY;
 
                 if (field[randXPosition, randYPosition] != Field.Mine)
                     field[randXPosition, randYPosition] = Field.Mine;
