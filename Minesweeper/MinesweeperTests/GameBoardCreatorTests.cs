@@ -9,6 +9,15 @@ namespace MinesweeperTests
 {
     class GameBoardCreatorTests
     {
+
+        IGameBoardCreator creator;
+
+        [SetUp]
+        public void setup()
+        {
+            creator = new GameBoardCreator(new RandInt());
+        }
+
         [Test]
         [TestCase(1, 2, 3, 3)]
         [TestCase(-2, 15, 3, 15)]
@@ -18,7 +27,6 @@ namespace MinesweeperTests
         [TestCase(60, 40, 50, 40)]
         public void GivenInvalidDimensions_ThenGeneratorCreatesClosestValidBoard(int dimX, int dimY, int expectedDimX, int expectedDimY)
         {
-            IGameBoardCreator creator = new GameBoardCreator(new RandInt());
             var board = creator.GenerateGameBoard(dimX, dimY);
 
             Assert.That(board.GetLength(0) == expectedDimX);
@@ -31,7 +39,6 @@ namespace MinesweeperTests
         [TestCase(25, 40, 25, 40)]
         public void GivenValidDimensions_ThenGeneratorCreatesValidBoard(int dimX, int dimY, int expectedDimX, int expectedDimY)
         {
-            IGameBoardCreator creator = new GameBoardCreator(new RandInt());
             var board = creator.GenerateGameBoard(dimX, dimY);
 
             Assert.That(board.GetLength(0) == expectedDimX);
@@ -43,10 +50,15 @@ namespace MinesweeperTests
         [TestCase(3, 3)]
         public void GivenGameBoard_ContainsMines(int dimX, int dimY)
         {
-            IGameBoardCreator creator = new GameBoardCreator(new RandInt());
             var board = creator.GenerateGameBoard(dimX, dimY);
 
-            Assert.Contains(Field.Mine, board);
+            bool hasMines = false;
+            foreach (var item in board)
+            {
+                if (item.HasFlag(Field.Mine))
+                    hasMines = true;
+            }
+            Assert.True(hasMines);
         }
 
         [Test]
@@ -70,12 +82,53 @@ namespace MinesweeperTests
             {
                 for (int j = 0; j < dimY; j++)
                 {
-                    if (board[i, j] == Field.Mine)
+                    if (board[i, j].HasFlag(Field.Mine))
                         mineCount++;
                 }
             }
 
             Assert.That(mineCount == expectedCount, $"{mineCount} neq {expectedCount}");
+        }
+        
+        bool CheckArea(Field[,] board, int i, int j)
+        {
+            Field mines = Field.One;
+            for (int x = i - 1; x <= i + 1; x++)
+            {
+                if (x < 0 || board.GetLength(0) <= x)
+                    continue;
+
+                for (int y = j - 1; y <= j + 1; y++)
+                {
+                    if (y < 0 || board.GetLength(1) <= y)
+                        continue;
+
+                    if (board[x, y].HasFlag(Field.Mine))
+                        mines = (Field)((int)mines >> 1);
+                }
+            }
+            mines = (Field)((int)mines << 1);
+
+            return board[i, j].HasFlag(mines);
+        }
+
+        [Test]
+        [TestCase(3, 3)]
+        [TestCase(10, 10)]
+        [TestCase(5, 12)]
+        [TestCase(47, 15)]
+        public void GivenGameBoard_ThenEmptyFieldsContainCorrectNumbers(int dimX, int dimY)
+        {
+            Field[,] generatedBoard = creator.GenerateGameBoard(dimX, dimY);
+
+            for (int i = 0; i < dimX; i++)
+            {
+                for (int j = 0; j < dimY; j++)
+                {
+                    if (!generatedBoard[i, j].HasFlag(Field.Mine))
+                        Assert.True(CheckArea(generatedBoard, i, j), $"index i: {i}, index j: {j}");
+                }
+            }
         }
     }
 }

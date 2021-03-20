@@ -19,5 +19,6 @@ namespace Minesweeper
         {
             return _board[i - 1, j - 1];
         }
+
     }
 }

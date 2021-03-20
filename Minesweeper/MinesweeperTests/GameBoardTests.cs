@@ -12,10 +12,9 @@ namespace MinesweeperTests
         }
 
         [Test]
-        [TestCase(Field.EmptyCovered)]
-        [TestCase(Field.EmptyRevealed)]
-        [TestCase(Field.Flagged)]
+        [TestCase(Field.Covered)]
         [TestCase(Field.Mine)]
+        [TestCase(Field.Flagged)]
         public void GivenBoardWithMine_ThenGetReturnsMine(Field field)
         {
             IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
@@ -40,9 +39,9 @@ namespace MinesweeperTests
         {
             IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
             A.CallTo(() => gameBoardCreator.GenerateGameBoard(3, 3)).Returns(new Field[3, 3] {                 
-                { Field.EmptyCovered, Field.EmptyRevealed, Field.Flagged },
-                { Field.Flagged, Field.EmptyRevealed, Field.Mine},
-                { Field.Mine, Field.EmptyCovered, Field.Mine}
+                { Field.Covered, Field.One, Field.One },
+                { Field.Covered, Field.Flagged, Field.Two},
+                { Field.Covered, Field.Covered, Field.Covered}
             });
 
             Field[,] generatedBoard = gameBoardCreator.GenerateGameBoard(3, 3);
