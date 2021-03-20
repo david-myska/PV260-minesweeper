@@ -6,19 +6,21 @@ namespace Minesweeper
     {
         public Field[,] GenerateGameBoard(int dimX, int dimY)
         {
-            if (dimX < 3)
-                dimX = 3;
-            if (dimX > 50)
-                dimX = 50;
-
-            if (dimY < 3)
-                dimY = 3;
-            if (dimY > 50)
-                dimY = 50;
+            dimX = AdjustDimension(dimX);
+            dimY = AdjustDimension(dimY);
 
             var field = new Field[dimX, dimY];
 
             return field;
+        }
+
+        private int AdjustDimension(int dim)
+        {
+            if (dim < 3)
+                dim = 3;
+            if (dim > 50)
+                dim = 50;
+            return dim;
         }
     }
 }
