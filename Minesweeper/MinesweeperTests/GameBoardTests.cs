@@ -17,7 +17,7 @@ namespace MinesweeperTests
             IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
             A.CallTo(() => gameBoardCreator.GenerateGameBoard(1, 1)).Returns(new Field[1, 1] { { Field.Mine } });
 
-            IGameBoard gameBoard;//todo
+            IGameBoard gameBoard = new GameBoard(gameBoardCreator, 1, 1);
 
             Assert.That(gameBoard.Get(1, 1) == Field.Mine);
         }
