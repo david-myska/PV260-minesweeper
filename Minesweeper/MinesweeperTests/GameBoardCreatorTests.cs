@@ -35,6 +35,8 @@ namespace MinesweeperTests
         }
 
         [Test]
+        [TestCase(20,25)]
+        [TestCase(3, 3)]
         public void GivenGameBoard_ContainsMines(int dimX, int dimY)
         {
             IGameBoardCreator creator = new GameBoardCreator();
