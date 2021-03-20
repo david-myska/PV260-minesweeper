@@ -19,6 +19,7 @@ namespace Minesweeper
         Eight = 128,
         Covered = 256,
         Flagged = 512,
-        Mine = 1024
+        Mine = 1024,
+        Zero = 2048
     }
 }

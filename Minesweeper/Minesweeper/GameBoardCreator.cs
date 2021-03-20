@@ -38,7 +38,7 @@ namespace Minesweeper
             {
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    board[i, j] = Field.Covered;
+                    board[i, j] = Field.Covered | Field.Zero;
                 }
             }
         }
@@ -74,6 +74,7 @@ namespace Minesweeper
             }
             mines = (Field)((int)mines << 1);
             board[i, j] |= mines;
+            board[i, j] &= ~Field.Zero;
         }
 
         private void FillMines(Field[,] field, int numberOfMines, int dimX, int dimY)
@@ -92,6 +93,7 @@ namespace Minesweeper
                 }
 
                 field[randXPosition, randYPosition] |= Field.Mine;
+                field[randXPosition, randYPosition] &= ~Field.Zero;
             }
         }
 

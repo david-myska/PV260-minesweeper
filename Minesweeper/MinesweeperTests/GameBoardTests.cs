@@ -76,6 +76,24 @@ namespace MinesweeperTests
         [Test]
         [TestCase(1, 1)]
         [TestCase(1, 2)]
+        public void GivenCoveredBoard_UncoverCorrectlySmallArea(int posX, int posY)
+        {
+            IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
+            A.CallTo(() => gameBoardCreator.GenerateGameBoard(1, 2)).Returns(new Field[1, 2] {
+                { Field.Covered | Field.Zero, Field.Covered | Field.Zero }
+            });
+
+            IGameBoard gameBoard = new GameBoard(gameBoardCreator, 1, 2);
+
+            gameBoard.Choose(posX, posY);
+
+            Assert.False(gameBoard.Get(1, 1).HasFlag(Field.Covered));
+            Assert.False(gameBoard.Get(1, 2).HasFlag(Field.Covered));
+        }
+
+        [Test]
+        [TestCase(1, 1)]
+        [TestCase(1, 2)]
         [TestCase(1, 3)]
         [TestCase(2, 1)]
         [TestCase(2, 2)]
@@ -87,20 +105,20 @@ namespace MinesweeperTests
         {
             IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
             A.CallTo(() => gameBoardCreator.GenerateGameBoard(3, 3)).Returns(new Field[3, 3] {
-                { Field.Covered, Field.Covered, Field.Covered },
-                { Field.Covered, Field.Covered, Field.Covered },
-                { Field.Covered, Field.Covered, Field.Covered }
+                { Field.Covered | Field.Zero, Field.Covered | Field.Zero, Field.Covered | Field.Zero },
+                { Field.Covered | Field.Zero, Field.Covered | Field.Zero, Field.Covered | Field.Zero },
+                { Field.Covered | Field.Zero, Field.Covered | Field.Zero, Field.Covered | Field.Zero }
             });
 
             IGameBoard gameBoard = new GameBoard(gameBoardCreator, 3, 3);
 
             gameBoard.Choose(posX, posY);
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 1; i <= 3; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 1; j <= 3; j++)
                 {
-                    Assert.False(gameBoard.Get(i, j).HasFlag(Field.Covered));
+                    Assert.False(gameBoard.Get(i, j).HasFlag(Field.Covered), $"i:{i} - j:{j}");
                 }
             }
         }
