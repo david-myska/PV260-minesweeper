@@ -51,5 +51,7 @@ namespace MinesweeperTests
 
             Assert.That(gameBoard.Get(posX, posY) == generatedBoard[posX - 1, posY - 1]);
         }
+
+        //Test for out of bounds positions 
     }
 }
