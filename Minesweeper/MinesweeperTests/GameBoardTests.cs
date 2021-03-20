@@ -122,5 +122,34 @@ namespace MinesweeperTests
                 }
             }
         }
+
+        [Test]
+        [TestCase(1, 1)]
+        [TestCase(1, 2)]
+        public void GivenCoveredBoard_UncoverCorrectlyLargerAreaWithMines(int posX, int posY)
+        {
+            IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
+            A.CallTo(() => gameBoardCreator.GenerateGameBoard(3, 3)).Returns(new Field[3, 3] {
+                { Field.Covered | Field.Zero, Field.Covered | Field.Zero, Field.Covered | Field.Zero },
+                { Field.Covered | Field.Zero, Field.Covered | Field.One , Field.Covered | Field.One  },
+                { Field.Covered | Field.Zero, Field.Covered | Field.One , Field.Covered | Field.Mine }
+            });
+
+            IGameBoard gameBoard = new GameBoard(gameBoardCreator, 3, 3);
+
+            gameBoard.Choose(posX, posY);
+
+            for (int i = 1; i <= 3; i++)
+            {
+                for (int j = 1; j <= 3; j++)
+                {
+                    if (i == 3 && j == 3)
+                        continue;
+
+                    Assert.False(gameBoard.Get(i, j).HasFlag(Field.Covered), $"i:{i} - j:{j}");
+                }
+            }
+            Assert.That(gameBoard.Get(3, 3).HasFlag(Field.Covered));
+        }
     }
 }
