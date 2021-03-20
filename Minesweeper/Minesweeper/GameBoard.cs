@@ -15,6 +15,12 @@ namespace Minesweeper
             _board = creator.GenerateGameBoard(dimX, dimY);
         }
 
+        public void Choose(int i, int j)
+        {
+            if (_board[i - 1, j - 1].HasFlag(Field.Covered))
+                _board[i - 1, j - 1] &= ~(Field.Covered);
+        }
+
         public Field Get(int i, int j)
         {
             return _board[i - 1, j - 1];

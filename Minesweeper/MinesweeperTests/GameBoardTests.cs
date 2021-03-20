@@ -52,5 +52,25 @@ namespace MinesweeperTests
         }
 
         //Test for out of bounds positions 
+
+        [Test]
+        [TestCase(1, 1)]
+        [TestCase(2, 3)]
+        [TestCase(2, 1)]
+        public void GivenCoveredBoard_ThenFieldsGetsUncovered(int posX, int posY)
+        {
+            IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
+            A.CallTo(() => gameBoardCreator.GenerateGameBoard(3, 3)).Returns(new Field[3, 3] {
+                { Field.Covered, Field.Covered, Field.Covered },
+                { Field.Covered, Field.Covered, Field.Covered},
+                { Field.Covered, Field.Covered, Field.Covered}
+            });
+
+            IGameBoard gameBoard = new GameBoard(gameBoardCreator, 3, 3);
+
+            gameBoard.Choose(posX, posY);
+
+            Assert.False(gameBoard.Get(posX, posY).HasFlag(Field.Covered));
+        }
     }
 }
