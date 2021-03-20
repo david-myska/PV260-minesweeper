@@ -8,6 +8,6 @@ namespace Minesweeper
 {
     public interface IGameBoardCreator
     {
-        IGameBoard GenerateGameBoard(int dimX, int dimY);
+        Field[,] GenerateGameBoard(int dimX, int dimY);
     }
 }
