@@ -66,13 +66,16 @@ namespace MinesweeperTests
             int mineCount = 0;
             int expectedCount = (int) ((dimX * dimY) * (percent / 100.0));
 
-            foreach (var v in board)
+            for (int i = 0; i < dimX; i++)
             {
-                if (v == Field.Mine)
-                    mineCount++;
+                for (int j = 0; j < dimY; j++)
+                {
+                    if (board[i, j] == Field.Mine)
+                        mineCount++;
+                }
             }
 
-            Assert.That(mineCount == expectedCount);
+            Assert.That(mineCount == expectedCount, $"{mineCount} neq {expectedCount}");
         }
     }
 }

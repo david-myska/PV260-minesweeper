@@ -18,6 +18,9 @@ namespace Minesweeper
 
             var field = new Field[dimX, dimY];
             int rand = numberGenerator.NextInt();
+            if (rand > 60 || rand < 20)
+                rand = rand % 41 + 20;
+
             int numberOfMines = (int)((dimX * dimY) * (rand / 100.0));
 
             FillMines(field, numberOfMines, dimX, dimY);
@@ -32,8 +35,23 @@ namespace Minesweeper
                 int randXPosition = numberGenerator.NextInt() % dimX;
                 int randYPosition = numberGenerator.NextInt() % dimY;
 
-                if (field[randXPosition, randYPosition] != Field.Mine)
-                    field[randXPosition, randYPosition] = Field.Mine;
+
+                while (field[randXPosition, randYPosition] == Field.Mine)
+                {
+                    randXPosition++;
+                    if (randXPosition == dimX)
+                    {
+                        randXPosition = 0;
+                        randYPosition++;
+
+                        if (randYPosition == dimY)
+                        {
+                            randYPosition = 0;
+                        }
+                    }
+                }
+
+                field[randXPosition, randYPosition] = Field.Mine;
             }
         }
 
