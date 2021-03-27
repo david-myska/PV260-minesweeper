@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Minesweeper
 {
-    public class RandInt : IRandom
+    public class RandomInteger : IRandomInteger
     {
         private Random _generator = new Random();
         public int NextInt()

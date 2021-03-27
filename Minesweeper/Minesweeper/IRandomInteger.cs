@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Minesweeper
 {
-    public interface IRandom
+    public interface IRandomInteger
     {
         int NextInt();
     }

@@ -15,7 +15,7 @@ namespace MinesweeperTests
         [SetUp]
         public void setup()
         {
-            creator = new GameBoardCreator(new RandInt());
+            creator = new GameBoardCreator(new RandomInteger());
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace MinesweeperTests
         [TestCase(31, 30, 20)]
         public void GivenGameBoard_ContainsValidPercentOfMines(int dimX, int dimY, int percent)
         {
-            IRandom randomGenerator = A.Fake<IRandom>();
+            IRandomInteger randomGenerator = A.Fake<IRandomInteger>();
             A.CallTo(() => randomGenerator.NextInt()).Returns(percent);
             IGameBoardCreator creator = new GameBoardCreator(randomGenerator);
             var board = creator.GenerateGameBoard(dimX, dimY);

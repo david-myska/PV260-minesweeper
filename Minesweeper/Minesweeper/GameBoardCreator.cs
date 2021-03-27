@@ -4,9 +4,9 @@ namespace Minesweeper
 {
     public class GameBoardCreator : IGameBoardCreator
     {
-        private IRandom numberGenerator;
+        private IRandomInteger numberGenerator;
 
-        public GameBoardCreator(IRandom next)
+        public GameBoardCreator(IRandomInteger next)
         {
             numberGenerator = next;
         }
@@ -25,7 +25,7 @@ namespace Minesweeper
 
             int numberOfMines = (int)((dimX * dimY) * (rand / 100.0));
 
-            FillMines(field, numberOfMines, dimX, dimY);
+            FillMines(field, numberOfMines);
 
             FillNumbers(field);
 
@@ -58,43 +58,52 @@ namespace Minesweeper
         private void CountMinesInArea(Field[,] board, int i, int j)
         {
             Field mines = Field.One;
-            for (int x = i - 1; x <= i + 1; x++)
-            {
-                if (x < 0 || board.GetLength(0) <= x)
-                    continue;
 
-                for (int y = j - 1; y <= j + 1; y++)
-                {
-                    if (y < 0 || board.GetLength(1) <= y)
-                        continue;
+            CheckMines(board, ref mines, i - 1, j - 1);
+            CheckMines(board, ref mines, i - 1, j);
+            CheckMines(board, ref mines, i - 1, j + 1);
+            CheckMines(board, ref mines, i, j - 1);
+            CheckMines(board, ref mines, i, j + 1);
+            CheckMines(board, ref mines, i + 1, j - 1);
+            CheckMines(board, ref mines, i + 1, j);
+            CheckMines(board, ref mines, i + 1, j + 1);
 
-                    if (board[x, y].HasFlag(Field.Mine))
-                        mines = (Field)((int)mines >> 1);
-                }
-            }
             mines = (Field)((int)mines << 1);
             board[i, j] |= mines;
             board[i, j] &= ~Field.Zero;
         }
 
-        private void FillMines(Field[,] field, int numberOfMines, int dimX, int dimY)
+        private void CheckMines(Field[,] board, ref Field mines, int i, int j)
+        {
+            if ((i < 0 || board.GetLength(0) <= i) || (j < 0 || board.GetLength(1) <= j))
+                return;
+
+            if (board[i, j].HasFlag(Field.Mine))
+                mines = (Field)((int)mines >> 1);
+        }
+
+        private void FillMines(Field[,] field, int numberOfMines)
         {
             for (int i = numberOfMines; i > 0; i--)
             {
-                int randXPosition = numberGenerator.NextInt() % dimX;
-                int randYPosition = numberGenerator.NextInt() % dimY;
+                int randXPosition = numberGenerator.NextInt() % field.GetLength(0);
+                int randYPosition = numberGenerator.NextInt() % field.GetLength(1);
 
-
-                while (field[randXPosition, randYPosition].HasFlag(Field.Mine))
-                {
-                    randXPosition = AdjustPosition(randXPosition, dimX);
-                    if (randXPosition == 0)
-                        randYPosition = AdjustPosition(randYPosition, dimY);
-                }
-
-                field[randXPosition, randYPosition] |= Field.Mine;
-                field[randXPosition, randYPosition] &= ~Field.Zero;
+                InsertMine(field, randXPosition, randYPosition);
             }
+        }
+
+        private void InsertMine(Field[,] field, int randXPosition, int randYPosition)
+        {
+            while (field[randXPosition, randYPosition].HasFlag(Field.Mine))
+            {
+                randXPosition = AdjustPosition(randXPosition, field.GetLength(0));
+                if (randXPosition == 0)
+                    randYPosition = AdjustPosition(randYPosition, field.GetLength(1));
+            }
+
+            field[randXPosition, randYPosition] |= Field.Mine;
+            field[randXPosition, randYPosition] &= ~Field.Zero;
         }
 
         private int AdjustPosition(int pos, int dim)
