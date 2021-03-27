@@ -20,8 +20,7 @@ namespace Minesweeper
 
         public void Choose(int i, int j)
         {
-            i--;
-            j--;
+            (i, j) = PrepareIndices(i, j);
 
             if (_board[i, j].HasFlag(Field.Flagged))
                 return;
@@ -40,6 +39,16 @@ namespace Minesweeper
             }
         }
 
+        private (int, int) PrepareIndices(int i, int j)
+        {
+            i--;
+            j--;
+            if ((i < 0 || _board.GetLength(0) <= i) || (j < 0 || _board.GetLength(1) <= j))
+                throw new IndexOutOfRangeException();
+
+            return (i, j);
+        }
+
         public void UncoverAllFields()
         {
             for (int i = 0; i < _board.GetLength(0); i++)
@@ -53,31 +62,38 @@ namespace Minesweeper
 
         public bool IsMine(int i, int j)
         {
-            return _board[i - 1, j - 1].HasFlag(Field.Mine);
+            (i, j) = PrepareIndices(i, j);
+            return _board[i, j].HasFlag(Field.Mine);
         }
 
         public bool IsFlagged(int i, int j)
         {
-            return _board[i - 1, j - 1].HasFlag(Field.Flagged);
+            (i, j) = PrepareIndices(i, j);
+            return _board[i, j].HasFlag(Field.Flagged);
         }
 
         public bool IsCovered(int i, int j)
         {
-            return _board[i - 1, j - 1].HasFlag(Field.Covered);
+            (i, j) = PrepareIndices(i, j);
+            return _board[i, j].HasFlag(Field.Covered);
         }
 
         public bool IsNumber(int i, int j)
         {
-            return !_board[i - 1, j - 1].HasFlag(Field.Mine);
+            (i, j) = PrepareIndices(i, j);
+            return !_board[i, j].HasFlag(Field.Mine);
         }
 
         private void TraverseNeighbors(int i, int j, bool isFirst = false)
         {
+            // Is not out of bounds
             if ((i < 0 || _board.GetLength(0) <= i) || (j < 0 || _board.GetLength(1) <= j))
                 return;
+
             if (!_board[i, j].HasFlag(Field.Covered) && !isFirst)
                 return;
-
+            if (_board[i, j].HasFlag(Field.Flagged))
+                return;
             if (_board[i, j].HasFlag(Field.Covered))
                 _board[i, j] = _board[i, j].ClearFlag(Field.Covered);
 
@@ -97,7 +113,8 @@ namespace Minesweeper
 
         public Field Get(int i, int j)
         {
-            return _board[i - 1, j - 1];
+            (i, j) = PrepareIndices(i, j);
+            return _board[i, j];
         }
 
         public bool IsRunning()
@@ -107,8 +124,7 @@ namespace Minesweeper
 
         public void SetFlag(int i, int j)
         {
-            i--;
-            j--;
+            (i, j) = PrepareIndices(i, j);
             if (_board[i, j].HasFlag(Field.Covered))
                 _board[i, j] = _board[i, j].SetFlag(Field.Flagged);
         }

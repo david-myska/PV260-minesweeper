@@ -1,6 +1,7 @@
 using Minesweeper;
 using NUnit.Framework;
 using FakeItEasy;
+using System;
 
 namespace MinesweeperTests
 {
@@ -51,7 +52,35 @@ namespace MinesweeperTests
             Assert.That(gameBoard.Get(posX, posY) == generatedBoard[posX - 1, posY - 1]);
         }
 
-        //Test for out of bounds positions 
+        [Test]
+        [TestCase(-1, 1)]
+        [TestCase(0, 2)]
+        [TestCase(2, 0)]
+        [TestCase(2, -1)]
+        [TestCase(4, 3)]
+        [TestCase(10, 1)]
+        [TestCase(4, 0)]
+        [TestCase(0, 5)]
+        public void GivenBoard_GetInvalidIndicesThrowsException(int posX, int posY)
+        {
+            IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
+            A.CallTo(() => gameBoardCreator.GenerateGameBoard(3, 3)).Returns(new Field[3, 3] {
+                { Field.Covered, Field.One, Field.One },
+                { Field.Covered, Field.Flagged, Field.Two},
+                { Field.Covered, Field.Covered, Field.Covered}
+            });
+
+            Field[,] generatedBoard = gameBoardCreator.GenerateGameBoard(3, 3);
+
+            IGameBoard gameBoard = new GameBoard(gameBoardCreator, 3, 3);
+
+            Assert.Throws<IndexOutOfRangeException>(() => gameBoard.Get(posX, posY));
+            Assert.Throws<IndexOutOfRangeException>(() => gameBoard.IsCovered(posX, posY));
+            Assert.Throws<IndexOutOfRangeException>(() => gameBoard.IsFlagged(posX, posY));
+            Assert.Throws<IndexOutOfRangeException>(() => gameBoard.IsMine(posX, posY));
+            Assert.Throws<IndexOutOfRangeException>(() => gameBoard.IsNumber(posX, posY));
+        }
+
 
         [Test]
         [TestCase(1, 1)]
@@ -261,6 +290,25 @@ namespace MinesweeperTests
 
             Assert.False(gameBoard.IsCovered(posX, posY));
             Assert.False(gameBoard.IsFlagged(posX, posY));
+        }
+
+
+        [Test]
+        [TestCase(1, 1)]
+        public void GivenCoveredBoardWithFlag_UncoverCorrectlySmallArea(int posX, int posY)
+        {
+            IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
+            A.CallTo(() => gameBoardCreator.GenerateGameBoard(1, 2)).Returns(new Field[1, 2] {
+                { Field.Covered | Field.Zero, Field.Covered | Field.Zero | Field.Flagged }
+            });
+
+            IGameBoard gameBoard = new GameBoard(gameBoardCreator, 1, 2);
+
+            gameBoard.Choose(posX, posY);
+
+            Assert.False(gameBoard.IsCovered(posX, posY));
+            Assert.True(gameBoard.IsCovered(1, 2));
+            Assert.True(gameBoard.IsFlagged(1, 2));
         }
     }
 }
