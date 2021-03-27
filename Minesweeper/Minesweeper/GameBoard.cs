@@ -104,5 +104,13 @@ namespace Minesweeper
         {
             return !_steppedOnMine;
         }
+
+        public void SetFlag(int i, int j)
+        {
+            i--;
+            j--;
+            if (_board[i, j].HasFlag(Field.Covered))
+                _board[i, j] = _board[i, j].SetFlag(Field.Flagged);
+        }
     }
 }
