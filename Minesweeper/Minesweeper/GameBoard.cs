@@ -33,6 +33,26 @@ namespace Minesweeper
             }
         }
 
+        public bool IsMine(int i, int j)
+        {
+            return _board[i, j].HasFlag(Field.Mine);
+        }
+
+        public bool IsFlagged(int i, int j)
+        {
+            return _board[i, j].HasFlag(Field.Flagged);
+        }
+
+        public bool IsCovered(int i, int j)
+        {
+            return _board[i, j].HasFlag(Field.Covered);
+        }
+
+        public bool IsNumber(int i, int j)
+        {
+            return !_board[i, j].HasFlag(Field.Mine);
+        }
+
         private void TraverseNeighbors(int i, int j, bool isFirst = false)
         {
             if ((i < 0 || _board.GetLength(0) <= i) || (j < 0 || _board.GetLength(1) <= j))
