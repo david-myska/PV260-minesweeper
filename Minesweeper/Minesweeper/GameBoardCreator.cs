@@ -57,20 +57,21 @@ namespace Minesweeper
 
         private void CountMinesInArea(Field[,] board, int i, int j)
         {
-            Field mines = Field.One;
+            Field numberOfMines = Field.One;
 
-            CheckMines(board, ref mines, i - 1, j - 1);
-            CheckMines(board, ref mines, i - 1, j);
-            CheckMines(board, ref mines, i - 1, j + 1);
-            CheckMines(board, ref mines, i, j - 1);
-            CheckMines(board, ref mines, i, j + 1);
-            CheckMines(board, ref mines, i + 1, j - 1);
-            CheckMines(board, ref mines, i + 1, j);
-            CheckMines(board, ref mines, i + 1, j + 1);
+            CheckMines(board, ref numberOfMines, i - 1, j - 1);
+            CheckMines(board, ref numberOfMines, i - 1, j);
+            CheckMines(board, ref numberOfMines, i - 1, j + 1);
+            CheckMines(board, ref numberOfMines, i, j - 1);
+            CheckMines(board, ref numberOfMines, i, j + 1);
+            CheckMines(board, ref numberOfMines, i + 1, j - 1);
+            CheckMines(board, ref numberOfMines, i + 1, j);
+            CheckMines(board, ref numberOfMines, i + 1, j + 1);
 
-            mines = (Field)((int)mines << 1);
-            board[i, j] |= mines;
-            board[i, j] &= ~Field.Zero;
+            //Correct number of mines
+            numberOfMines = (Field)((int)numberOfMines << 1);
+            board[i, j] = board[i, j].SetFlag(numberOfMines);
+            board[i, j] = board[i, j].ClearFlag(Field.Zero);
         }
 
         private void CheckMines(Field[,] board, ref Field mines, int i, int j)
