@@ -8,7 +8,7 @@ namespace Minesweeper
 {
     public class GameBoard : IGameBoard
     {
-        private Field[,] _board;
+        private readonly Field[,] _board;
 
         public GameBoard(IGameBoardCreator creator, int dimX, int dimY)
         {
@@ -20,7 +20,7 @@ namespace Minesweeper
             i--;
             j--;
             if (_board[i, j].HasFlag(Field.Covered))
-                _board[i, j] &= ~(Field.Covered);
+                _board[i, j] =_board[i, j].ClearFlag(Field.Covered);
 
             if (_board[i, j].HasFlag(Field.Mine))
             {
@@ -29,33 +29,30 @@ namespace Minesweeper
 
             if (_board[i, j].HasFlag(Field.Zero))
             {
-                TraverseNeighbors(i, j);
+                TraverseNeighbors(i, j, true);
             }
         }
 
-        private void TraverseNeighbors(int i, int j)
+        private void TraverseNeighbors(int i, int j, bool isFirst = false)
         {
+            if ((i < 0 || _board.GetLength(0) <= i) || (j < 0 || _board.GetLength(1) <= j))
+                return;
+            if (!_board[i, j].HasFlag(Field.Covered) && !isFirst)
+                return;
+
             if (_board[i, j].HasFlag(Field.Covered))
-                _board[i, j] &= ~(Field.Covered);
+                _board[i, j] = _board[i, j].ClearFlag(Field.Covered);
 
             if (_board[i, j].HasFlag(Field.Zero))
             {
-                for (int x = i - 1; x <= i + 1; x++)
-                {
-                    if (x < 0 || _board.GetLength(0) <= x)
-                        continue;
-
-                    for (int y = j - 1; y <= j + 1; y++)
-                    {
-                        if (y < 0 || _board.GetLength(1) <= y)
-                            continue;
-
-                        if (_board[x, y].HasFlag(Field.Covered))
-                        {
-                            TraverseNeighbors(x, y);
-                        }
-                    }
-                }
+                TraverseNeighbors(i - 1, j - 1);
+                TraverseNeighbors(i - 1, j);
+                TraverseNeighbors(i - 1, j + 1);
+                TraverseNeighbors(i, j - 1);
+                TraverseNeighbors(i, j + 1);
+                TraverseNeighbors(i + 1, j - 1);
+                TraverseNeighbors(i + 1, j);
+                TraverseNeighbors(i + 1, j + 1);
             }
 
         }
