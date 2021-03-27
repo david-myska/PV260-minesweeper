@@ -22,6 +22,8 @@ namespace Minesweeper
         {
             i--;
             j--;
+
+            
             if (_board[i, j].HasFlag(Field.Covered))
                 _board[i, j] =_board[i, j].ClearFlag(Field.Covered);
 
@@ -49,22 +51,22 @@ namespace Minesweeper
 
         public bool IsMine(int i, int j)
         {
-            return _board[i, j].HasFlag(Field.Mine);
+            return _board[i - 1, j - 1].HasFlag(Field.Mine);
         }
 
         public bool IsFlagged(int i, int j)
         {
-            return _board[i, j].HasFlag(Field.Flagged);
+            return _board[i - 1, j - 1].HasFlag(Field.Flagged);
         }
 
         public bool IsCovered(int i, int j)
         {
-            return _board[i, j].HasFlag(Field.Covered);
+            return _board[i - 1, j - 1].HasFlag(Field.Covered);
         }
 
         public bool IsNumber(int i, int j)
         {
-            return !_board[i, j].HasFlag(Field.Mine);
+            return !_board[i - 1, j - 1].HasFlag(Field.Mine);
         }
 
         private void TraverseNeighbors(int i, int j, bool isFirst = false)
