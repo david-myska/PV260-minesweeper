@@ -9,9 +9,9 @@ namespace Minesweeper
     public class RandomInteger : IRandomInteger
     {
         private Random _generator = new Random();
-        public int NextInt()
+        public int NextInt(int low, int high)
         {
-            return _generator.Next();
+            return _generator.Next(low, high + 1);
         }
     }
 }

@@ -72,7 +72,7 @@ namespace MinesweeperTests
         public void GivenGameBoard_ContainsValidPercentOfMines(int dimX, int dimY, int percent)
         {
             IRandomInteger randomGenerator = A.Fake<IRandomInteger>();
-            A.CallTo(() => randomGenerator.NextInt()).Returns(percent);
+            A.CallTo(() => randomGenerator.NextInt(20, 60)).Returns(percent);
             IGameBoardCreator creator = new GameBoardCreator(randomGenerator);
             var board = creator.GenerateGameBoard(dimX, dimY);
             int mineCount = 0;

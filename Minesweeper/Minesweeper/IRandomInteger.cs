@@ -8,6 +8,6 @@ namespace Minesweeper
 {
     public interface IRandomInteger
     {
-        int NextInt();
+        int NextInt(int low, int high);
     }
 }

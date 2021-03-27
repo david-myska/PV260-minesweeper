@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 
 namespace Minesweeper
 {
     public class GameBoardCreator : IGameBoardCreator
     {
-        private IRandomInteger numberGenerator;
+        private readonly IRandomInteger numberGenerator;
+        private const int LowerBound = 20;
+        private const int UpperBound = 60;
 
         public GameBoardCreator(IRandomInteger next)
         {
@@ -18,15 +21,10 @@ namespace Minesweeper
 
             var field = new Field[dimX, dimY];
             FillCovered(field);
-
-            int rand = numberGenerator.NextInt();
-            if (rand > 60 || rand < 20)
-                rand = rand % 41 + 20;
-
+            int rand = numberGenerator.NextInt(LowerBound, UpperBound);
             int numberOfMines = (int)((dimX * dimY) * (rand / 100.0));
 
             FillMines(field, numberOfMines);
-
             FillNumbers(field);
 
             return field;
@@ -38,7 +36,7 @@ namespace Minesweeper
             {
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    board[i, j] = Field.Covered | Field.Zero;
+                    board[i, j] = board[i, j].SetFlag(Field.Covered | Field.Zero);
                 }
             }
         }
@@ -87,8 +85,8 @@ namespace Minesweeper
         {
             for (int i = numberOfMines; i > 0; i--)
             {
-                int randXPosition = numberGenerator.NextInt() % field.GetLength(0);
-                int randYPosition = numberGenerator.NextInt() % field.GetLength(1);
+                int randXPosition = numberGenerator.NextInt(0, field.GetLength(0) - 1);
+                int randYPosition = numberGenerator.NextInt(0, field.GetLength(1) - 1);
 
                 InsertMine(field, randXPosition, randYPosition);
             }
@@ -103,8 +101,7 @@ namespace Minesweeper
                     randYPosition = AdjustPosition(randYPosition, field.GetLength(1));
             }
 
-            field[randXPosition, randYPosition] |= Field.Mine;
-            field[randXPosition, randYPosition] &= ~Field.Zero;
+            field[randXPosition, randYPosition] = field[randXPosition, randYPosition].SetFlag(Field.Mine).ClearFlag(Field.Zero);
         }
 
         private int AdjustPosition(int pos, int dim)
