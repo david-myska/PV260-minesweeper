@@ -10,6 +10,9 @@ namespace Minesweeper
     {
         private readonly Field[,] _board;
 
+        private bool _steppedOnMine = false;
+
+
         public GameBoard(IGameBoardCreator creator, int dimX, int dimY)
         {
             _board = creator.GenerateGameBoard(dimX, dimY);
@@ -24,12 +27,23 @@ namespace Minesweeper
 
             if (_board[i, j].HasFlag(Field.Mine))
             {
-                //boom
+                _steppedOnMine = true;
             }
 
             if (_board[i, j].HasFlag(Field.Zero))
             {
                 TraverseNeighbors(i, j, true);
+            }
+        }
+
+        public void UncoverAllFields()
+        {
+            for (int i = 0; i < _board.GetLength(0); i++)
+            {
+                for (int j = 0; j < _board.GetLength(1); j++)
+                {
+                    _board[i, j] = _board[i, j].ClearFlag(Field.Covered);
+                }
             }
         }
 
@@ -82,5 +96,9 @@ namespace Minesweeper
             return _board[i - 1, j - 1];
         }
 
+        public bool IsRunning()
+        {
+            return !_steppedOnMine;
+        }
     }
 }

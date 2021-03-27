@@ -1,21 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Tomáš\\Documents\\Nová složka\\Minesweeper\\Minesweeper\\Minesweeper.csproj": {}
+    "C:\\Users\\David\\source\\repos\\david-myska\\PV260-minesweeper\\Minesweeper\\Minesweeper\\Minesweeper.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Tomáš\\Documents\\Nová složka\\Minesweeper\\Minesweeper\\Minesweeper.csproj": {
+    "C:\\Users\\David\\source\\repos\\david-myska\\PV260-minesweeper\\Minesweeper\\Minesweeper\\Minesweeper.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Tomáš\\Documents\\Nová složka\\Minesweeper\\Minesweeper\\Minesweeper.csproj",
+        "projectUniqueName": "C:\\Users\\David\\source\\repos\\david-myska\\PV260-minesweeper\\Minesweeper\\Minesweeper\\Minesweeper.csproj",
         "projectName": "Minesweeper",
-        "projectPath": "C:\\Users\\Tomáš\\Documents\\Nová složka\\Minesweeper\\Minesweeper\\Minesweeper.csproj",
-        "packagesPath": "C:\\Users\\Tomáš\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Tomáš\\Documents\\Nová složka\\Minesweeper\\Minesweeper\\obj\\",
+        "projectPath": "C:\\Users\\David\\source\\repos\\david-myska\\PV260-minesweeper\\Minesweeper\\Minesweeper\\Minesweeper.csproj",
+        "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\David\\source\\repos\\david-myska\\PV260-minesweeper\\Minesweeper\\Minesweeper\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Tomáš\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\David\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -54,7 +58,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

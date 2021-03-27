@@ -10,5 +10,7 @@ namespace Minesweeper
         bool IsFlagged(int i, int j);
         bool IsCovered(int i, int j);
         bool IsNumber(int i, int j);
+
+        bool IsRunning();
     }
 }
