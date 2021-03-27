@@ -218,5 +218,49 @@ namespace MinesweeperTests
             Assert.True(gameBoard.IsMine(posX, posY));
             Assert.True(gameBoard.IsRunning());
         }
+
+
+        [Test]
+        [TestCase(1, 1)]
+        [TestCase(1, 2)]
+        [TestCase(3, 3)]
+        public void GivenBoardWithoutFlags_ThenSetFlagToCoveredFieldAddsFlag(int posX, int posY)
+        {
+            IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
+            A.CallTo(() => gameBoardCreator.GenerateGameBoard(3, 3)).Returns(new Field[3, 3] {
+                { Field.Covered | Field.Mine, Field.Covered, Field.Covered },
+                { Field.Covered, Field.Covered | Field.Mine, Field.Covered },
+                { Field.Covered, Field.Covered, Field.Covered | Field.Mine }
+            });
+
+            IGameBoard gameBoard = new GameBoard(gameBoardCreator, 3, 3);
+
+            gameBoard.SetFlag(posX, posY);
+
+            Assert.True(gameBoard.IsCovered(posX, posY));
+            Assert.True(gameBoard.IsFlagged(posX, posY));
+        }
+
+
+        [Test]
+        [TestCase(1, 1)]
+        [TestCase(1, 2)]
+        [TestCase(2, 1)]
+        public void GivenBoardWithoutFlags_ThenSetFlagToUncoveredFieldDoesNothing(int posX, int posY)
+        {
+            IGameBoardCreator gameBoardCreator = A.Fake<IGameBoardCreator>();
+            A.CallTo(() => gameBoardCreator.GenerateGameBoard(3, 3)).Returns(new Field[3, 3] {
+                { Field.One, Field.One, Field.Covered | Field.One },
+                { Field.One, Field.Covered | Field.Mine, Field.Covered | Field.One },
+                { Field.Covered | Field.One, Field.Covered | Field.One, Field.Covered | Field.One }
+            });
+
+            IGameBoard gameBoard = new GameBoard(gameBoardCreator, 3, 3);
+
+            gameBoard.SetFlag(posX, posY);
+
+            Assert.False(gameBoard.IsCovered(posX, posY));
+            Assert.False(gameBoard.IsFlagged(posX, posY));
+        }
     }
 }
