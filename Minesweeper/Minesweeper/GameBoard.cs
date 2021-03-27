@@ -23,7 +23,9 @@ namespace Minesweeper
             i--;
             j--;
 
-            
+            if (_board[i, j].HasFlag(Field.Flagged))
+                return;
+
             if (_board[i, j].HasFlag(Field.Covered))
                 _board[i, j] =_board[i, j].ClearFlag(Field.Covered);
 
